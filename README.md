@@ -1,5 +1,8 @@
-Native Web Paper Editor
-=======================
+Napa Editor
+===========
+
+"Napa" stands for NAtive web PApers.
+
 
 CKEditor
 --------
