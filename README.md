@@ -1,7 +1,7 @@
 Napa Editor
 ===========
 
-"Napa" stands for NAtive web PApers.
+"Napa" stands for NAtive web PApers. It is based on CKEditor and RASH.
 
 
 CKEditor
