@@ -3,7 +3,9 @@ $(function() {
     $(this).attr("contenteditable", "true");
     editor = CKEDITOR.inline($(this).get(0));
     editor.on('change', function(evt) {
-      console.log('CHANGED TEXT: ' + evt.editor.getData());
+      var data = evt.editor.getData();
+      console.log('CHANGED TEXT: ' + data);
+      $.post( "/event", { text: data } );
     });
   });
 });

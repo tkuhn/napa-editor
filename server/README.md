@@ -4,3 +4,8 @@ Run server:
 
     $ node server.js
 
+Install packages:
+
+    $ sudo npm install express
+    $ sudo npm install body-parser
+
