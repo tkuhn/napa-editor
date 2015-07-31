@@ -17,18 +17,28 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/examples/bots.html', function (req, res) {
-  var htmlSource = fs.readFileSync("../examples/bots.html", "utf8");
+  var htmlSource;
+  var isNew;
+  if (fs.existsSync("../docs/bots.html")) {
+    htmlSource = fs.readFileSync("../docs/bots.html", "utf8");
+    isNew = false;
+  } else {
+    htmlSource = fs.readFileSync("../examples/bots.html", "utf8");
+    isNew = true;
+  }
   jsdom.env(
     htmlSource,
     function(err, window) {
       if (err) throw err;
-      var $ = require('jquery')(window);
-      var i = 1;
-      $(".section,.abstract,.page-header,.bibliography").find("p,h1").not(".keywords").each(function() {
-        $(this).attr("contenteditable", "true");
-        var id = "editor" + i++;
-        $(this).attr("id", id);
-      });
+      if (isNew) {
+        var $ = require('jquery')(window);
+        var i = 1;
+        $(".section,.abstract,.page-header,.bibliography").find("p,h1").not(".keywords").each(function () {
+          $(this).attr("contenteditable", "true");
+          var id = "editor" + i++;
+          $(this).attr("id", id);
+        });
+      }
       docs["bots.html"] = window;
       res.write(window.document.documentElement.innerHTML);
       res.end();
@@ -54,7 +64,7 @@ var server = app.listen(3000, function () {
 });
 
 function saveDoc(name, doc) {
-  fs.writeFile("../docs/" + name, doc.documentElement.innerHTML, function(err) {
+  fs.writeFile("../docs/" + name, doc.documentElement.innerHTML, function (err) {
     if (err) throw err;
   });
 }
