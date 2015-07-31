@@ -26,6 +26,7 @@ app.get('/examples/bots.html', function (req, res) {
     htmlSource = fs.readFileSync("../examples/bots.html", "utf8");
     isNew = true;
   }
+  // TODO Load from file only if it's not yet in memory
   jsdom.env(
     htmlSource,
     function(err, window) {
