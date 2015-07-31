@@ -7,6 +7,7 @@ var jsdom = require('jsdom');
 var app = express();
 
 var docs = {};
+var docChanges = {};
 
 app.use('/examples/images', express.static('../examples/images'));
 app.use('/rash', express.static('../rash'));
@@ -19,9 +20,13 @@ app.use(bodyParser.json());
 app.get('/examples/bots.html', function (req, res) {
   if (req.query.mode == "changes") {
     var sessionid = req.query.sessionid;
+    if (!docChanges["bots.html"][sessionid]) {
+      console.log("new session: " + sessionid);
+      docChanges["bots.html"][sessionid] = {};
+    }
     res.writeHead(200, {"Content-Type": "application/json"});
-    // TODO return changes here
-    res.write(JSON.stringify({ foo: sessionid }));
+    res.write(JSON.stringify(docChanges["bots.html"][sessionid]));
+    docChanges["bots.html"][sessionid] = {};
     res.end();
     return;
   }
@@ -52,6 +57,7 @@ app.get('/examples/bots.html', function (req, res) {
         });
       }
       docs["bots.html"] = window;
+      docChanges["bots.html"] = {};
       returnDoc("bots.html", res);
     }
   );
@@ -66,6 +72,10 @@ app.post('/examples/bots.html', function (req, res) {
   for (var id in changes) {
     if (id == "_sessionid_") continue;
     $("#" + id).html(changes[id]);
+    for (var sid in docChanges["bots.html"]) {
+      if (sid == sessionid) continue;
+      docChanges["bots.html"][sid][id] = changes[id];
+    }
   }
   saveDoc("bots.html", docWindow.document);
 });

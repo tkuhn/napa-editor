@@ -17,8 +17,10 @@ $(function() {
       $.post("", changes);
       changes = {};
     }
-    $.get("?mode=changes&sessionid=" + sessionid, function (data) {
-      // TODO apply changes here
+    $.get("?mode=changes&sessionid=" + sessionid, function (changes) {
+      for (var id in changes) {
+        $("#" + id).html(changes[id]);
+      }
     });
   }, 1000);
 });
