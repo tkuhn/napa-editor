@@ -17,6 +17,9 @@ $(function() {
       $.post("", changes);
       changes = {};
     }
+    $.get("?mode=changes&sessionid=" + sessionid, function (data) {
+      // TODO apply changes here
+    });
   }, 1000);
 });
 

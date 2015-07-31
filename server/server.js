@@ -17,6 +17,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/examples/bots.html', function (req, res) {
+  if (req.query.mode == "changes") {
+    var sessionid = req.query.sessionid;
+    res.writeHead(200, {"Content-Type": "application/json"});
+    // TODO return changes here
+    res.write(JSON.stringify({ foo: sessionid }));
+    res.end();
+    return;
+  }
   if (docs["bots.html"]) {
     returnDoc("bots.html", res);
     return;
