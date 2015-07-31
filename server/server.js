@@ -17,6 +17,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/examples/bots.html', function (req, res) {
+  if (docs["bots.html"]) {
+    returnDoc("bots.html", res);
+    return;
+  }
   var htmlSource;
   var isNew;
   if (fs.existsSync("../docs/bots.html")) {
@@ -26,7 +30,6 @@ app.get('/examples/bots.html', function (req, res) {
     htmlSource = fs.readFileSync("../examples/bots.html", "utf8");
     isNew = true;
   }
-  // TODO Load from file only if it's not yet in memory
   jsdom.env(
     htmlSource,
     function(err, window) {
@@ -41,12 +44,9 @@ app.get('/examples/bots.html', function (req, res) {
         });
       }
       docs["bots.html"] = window;
-      res.write(window.document.documentElement.innerHTML);
-      res.end();
-      saveDoc("bots.html", window.document);
+      returnDoc("bots.html", res);
     }
   );
-
 });
 
 app.post('/examples/bots.html', function (req, res) {
@@ -63,6 +63,11 @@ app.post('/examples/bots.html', function (req, res) {
 var server = app.listen(3000, function () {
   console.log('Example at http://127.0.0.1:3000/examples/bots.html');
 });
+
+function returnDoc(name, res) {
+  res.write(docs[name].document.documentElement.innerHTML);
+  res.end();
+}
 
 function saveDoc(name, doc) {
   fs.writeFile("../docs/" + name, doc.documentElement.innerHTML, function (err) {
