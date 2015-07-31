@@ -55,7 +55,6 @@ To include the CKEditor in RASH requires the following few lines:
     <script type="text/javascript" src="ckeditor/lang/en.js"></script>
     <script type="text/javascript" src="ckeditor/styles.js"></script>
     
-    <script type="text/javascript" src="integrate_ckeditor.js"></script>
+    <script type="text/javascript" src="client/integrate_ckeditor.js"></script>
 
-This is only client-side so far. Saving or synchronizing is not yet
-implemented.
+Saving and synchronizing is being implemented but does not yet work...
