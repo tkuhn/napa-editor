@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var http = require('http');
 var fs = require('fs');
+var jsdom = require('jsdom');
 
 var app = express();
 
@@ -14,13 +15,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/examples/bots.html', function (req, res) {
-  fs.readFile('../examples/bots.html', function (err, html) {
-    if (err) throw err;
-    res.writeHeader(200, {"Content-Type": "text/html"});
-    // TODO: here we should parse the HTML to keep it in memory and apply the changes
-    res.write(html);
-    res.end();
-  });
+  var htmlSource = fs.readFileSync("../examples/bots.html", "utf8");
+  jsdom.env(
+    htmlSource,
+    function(err, window) {
+      if (err) throw err;
+      var $ = window.$;
+      // TODO: here we can apply changes to the HTML content
+      res.write(window.document.documentElement.innerHTML);
+      res.end();
+    }
+  );
+
 });
 
 app.post('/event', function (req, res) {
