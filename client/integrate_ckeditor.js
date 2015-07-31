@@ -14,7 +14,7 @@ $(function() {
   setInterval(function () {
     if (!jQuery.isEmptyObject(changes)) {
       console.log('CHANGES: ' + changes);
-      $.post( "/event", { 'changes': changes } );
+      $.post( "/event", changes );
       changes = {};
     }
   }, 1000);
