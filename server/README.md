@@ -4,6 +4,7 @@ following packages:
     $ sudo npm install express
     $ sudo npm install body-parser
     $ sudo npm install jsdom
+    $ sudo npm install jquery
 
 Run the server with:
 

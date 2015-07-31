@@ -20,8 +20,13 @@ app.get('/examples/bots.html', function (req, res) {
     htmlSource,
     function(err, window) {
       if (err) throw err;
-      var $ = window.$;
-      // TODO: here we can apply changes to the HTML content
+      var $ = require('jquery')(window);
+      var i = 1;
+      $(".section,.abstract,.page-header,.bibliography").find("p,h1").not(".keywords").each(function() {
+        $(this).attr("contenteditable", "true");
+        var id = "editor" + i++;
+        $(this).attr("id", id);
+      });
       res.write(window.document.documentElement.innerHTML);
       res.end();
     }
