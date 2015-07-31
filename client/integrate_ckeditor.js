@@ -1,5 +1,7 @@
 var changes = {};
 
+var sessionid = Math.floor(Math.random() * 1000000000);
+
 $(function() {
   var i = 1;
   $("[contenteditable]").each(function() {
@@ -11,7 +13,8 @@ $(function() {
   });
   setInterval(function () {
     if (!jQuery.isEmptyObject(changes)) {
-      $.post( "", changes );
+      changes["_sessionid_"] = sessionid;
+      $.post("", changes);
       changes = {};
     }
   }, 1000);

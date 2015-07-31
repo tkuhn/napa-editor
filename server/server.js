@@ -54,7 +54,9 @@ app.post('/examples/bots.html', function (req, res) {
   res.end();
   docWindow = docs["bots.html"];
   var $ = require('jquery')(docWindow);
+  var sessionid = changes["_sessionid_"];
   for (var id in changes) {
+    if (id == "_sessionid_") continue;
     $("#" + id).html(changes[id]);
   }
   saveDoc("bots.html", docWindow.document);
