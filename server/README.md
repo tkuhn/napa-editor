@@ -8,5 +8,5 @@ following packages:
 
 Run the server with:
 
-    $ iojs server.js
+    $ iojs napa-server.js
 

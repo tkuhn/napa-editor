@@ -8,6 +8,7 @@ var app = express();
 
 var docs = {};
 var docChanges = {};
+var seen = {};
 
 app.use('/examples/images', express.static('../examples/images'));
 app.use('/rash', express.static('../rash'));
@@ -17,6 +18,7 @@ app.use('/client', express.static('../client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// TODO make this general and not just for 'bots.html'
 app.get('/examples/bots.html', function (req, res) {
   if (req.query.mode == "changes") {
     var sessionid = req.query.sessionid;
@@ -24,6 +26,7 @@ app.get('/examples/bots.html', function (req, res) {
       console.log("new session: " + sessionid);
       docChanges["bots.html"][sessionid] = {};
     }
+    seen[sessionid] = true;
     res.writeHead(200, {"Content-Type": "application/json"});
     res.write(JSON.stringify(docChanges["bots.html"][sessionid]));
     docChanges["bots.html"][sessionid] = {};
@@ -83,6 +86,18 @@ app.post('/examples/bots.html', function (req, res) {
 var server = app.listen(3000, function () {
   console.log('Example at http://127.0.0.1:3000/examples/bots.html');
 });
+
+setInterval(function () {
+  for (sessionid in seen) {
+    if (seen[sessionid] === false) {
+      delete docChanges["bots.html"][sessionid];
+      delete seen[sessionid];
+      console.log("session expired: " + sessionid);
+    } else {
+      seen[sessionid] = false;
+    }
+  }
+}, 600000);
 
 function returnDoc(name, res) {
   res.write(docs[name].document.documentElement.innerHTML);
