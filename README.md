@@ -18,8 +18,6 @@ It was retrieved on 23 July 2015.
 Excluded files/directories:
 
     CHANGES.md
-    lang/* except for lang/en.js
-    plugins/*/dialogs/lang/* except for .../en.js
     samples/*
 
 The following files were changed:
